@@ -16,11 +16,11 @@ const adminRoutes = require('./api/routes/admins');
 
 const url = 'mongodb://localhost:27017/eventarich_me';
 // mongoose.connect('mongodb://localhost/eventarich_me');
-// mongoose.connect(keys.mongodb.dbURI, () => {
-//     console.log('connected to mongodb');
-// });
+mongoose.connect(keys.mongodb.dbURI, () => {
+    console.log('connected to mongodb');
+});
 // mongoose.Promise = global.Promise;
-mongoose.connect(url, { useNewUrlParser: true });
+// mongoose.connect(url, { useNewUrlParser: true });
 // mongoose.connect('mongodb://127.0.0.1:27017');
 mongoose.Promise = global.Promise;
 
