@@ -46,6 +46,8 @@ var date_create = date+' '+time;
 //var name = Jwts.parser().setSigningKey("bismillah").parseClaimsJws("base64EncodedJwtHere").getBody().get("name", String.class);
 
 //Routesnya /products
+
+//Post Events
 router.post('/', checkAuth, upload.single('event_image'), (req, res, next) => {
     console.log(req.file);
     const token = req.headers.authorization.split(" ")[1];
@@ -101,6 +103,7 @@ router.post('/', checkAuth, upload.single('event_image'), (req, res, next) => {
         });
 });
 
+//Get Event By UserId
 router.get('/user', checkAuth, (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const decode = jwt.verify(token, "bismillah");
@@ -144,8 +147,10 @@ router.get('/user', checkAuth, (req, res, next) => {
         });
 });
 
+
+//Get All Event
 router.get('/', (req, res, next) => {
-    Event.find()
+    Event.find({status : "Accept"})
         .populate('userId', 'name')
         .populate('categoryevent', 'name')
         .select('')
@@ -184,6 +189,7 @@ router.get('/', (req, res, next) => {
         });
 });
 
+// Get by EventId
 router.get('/:eventId', (req, res, next) => {
     const id = req.params.eventId;
     Event.findById(id)
@@ -213,33 +219,33 @@ router.get('/:eventId', (req, res, next) => {
 });
 
 
-router.post('/search', (req, res, next) => {
-    var title = req.body.title;
-    Event.find({title : title})
-        .populate('userId', 'name')
-        .populate('categoryevent', 'name')
-        .select('')
-        .exec()
-        .then(doc => {
-            console.log("From database", doc);
-            if(doc) {
-                res.status(200).json({
-                    event: doc,
-                    request: {
-                        type: "GET",
-                        desc: "Get all events",
-                        url: "http://localhost:3000/events"
-                    }
-                });
-            } else {
-                res.status(404).json({message: "Format EventID tidak valid"});
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({error : err});
-        });
-});
+// router.post('/search', (req, res, next) => {
+//     var title = req.body.title;
+//     Event.find({title : title})
+//         .populate('userId', 'name')
+//         .populate('categoryevent', 'name')
+//         .select('')
+//         .exec()
+//         .then(doc => {
+//             console.log("From database", doc);
+//             if(doc) {
+//                 res.status(200).json({
+//                     event: doc,
+//                     request: {
+//                         type: "GET",
+//                         desc: "Get all events",
+//                         url: "http://localhost:3000/events"
+//                     }
+//                 });
+//             } else {
+//                 res.status(404).json({message: "Format EventID tidak valid"});
+//             }
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({error : err});
+//         });
+// });
 
 router.patch('/edit/:eventId', checkAuth, (req, res, next) => {
     const id = req.params.eventId;
@@ -266,17 +272,38 @@ router.patch('/edit/:eventId', checkAuth, (req, res, next) => {
         });
 });
 
-router.patch('/accept/:eventId', checkAuth, (req, res, next) => {
+// router.patch('/accept/:eventId', checkAuth, (req, res, next) => {
+//     const id = req.params.eventId;
+//     // const updateOps = {};
+//     // for (const ops of req.body) {
+//     //     updateOps[ops.propName] = ops.value;
+//     // }
+//     Event.update({ _id: id }, { $set: {status : "Accept"} })
+//         .exec()
+//         .then(result => {
+//             res.status(200).json({
+//                 message: "Event Accepted",
+//                 request: {
+//                     type: "PATCH",
+//                     url: "http://localhost:3000/events" + id
+//                 }
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({
+//                 error: err
+//             });
+//         });
+// });
+//
+router.post('/delete/:eventId', checkAuth, (req, res, next) => {
     const id = req.params.eventId;
-    // const updateOps = {};
-    // for (const ops of req.body) {
-    //     updateOps[ops.propName] = ops.value;
-    // }
-    Event.update({ _id: id }, { $set: {status : "Accept"} })
+    Event.update({ _id: id }, { $set: {status : "0"} })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: "Event Accepted",
+                message: "Event Deleted",
                 request: {
                     type: "PATCH",
                     url: "http://localhost:3000/events" + id
@@ -291,44 +318,19 @@ router.patch('/accept/:eventId', checkAuth, (req, res, next) => {
         });
 });
 
-router.patch('/reject/:eventId', checkAuth, (req, res, next) => {
-    const id = req.params.eventId;
-    // const updateOps = {};
-    // for (const ops of req.body) {
-    //     updateOps[ops.propName] = ops.value;
-    // }
-    Event.update({ _id: id }, { $set: {status : "Rejected"} })
-        .exec()
-        .then(result => {
-            res.status(200).json({
-                message: "Event Rejected",
-                request: {
-                    type: "PATCH",
-                    url: "http://localhost:3000/events" + id
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-});
-
-router.delete('/delete/:eventId', checkAuth, (req, res, next) => {
-    const id = req.params.eventId;
-    Event.remove({_id: id})
-        .exec()
-        .then(result => {
-            res.status(200).json(result);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-});
+// router.delete('/delete/:eventId', checkAuth, (req, res, next) => {
+//     const id = req.params.eventId;
+//     Event.remove({_id: id})
+//         .exec()
+//         .then(result => {
+//             res.status(200).json(result);
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({
+//                 error: err
+//             });
+//         });
+// });
 
 module.exports = router;

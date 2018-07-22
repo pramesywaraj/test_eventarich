@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const checkAuth = require('../middleware/checkauth');
 
 //-----------Sign Up-----------//
-
 router.post('/signup', (req, res, next) => {
     User.find({email: req.body.email})
         .exec()
@@ -27,6 +26,7 @@ router.post('/signup', (req, res, next) => {
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
                             email: req.body.email,
+                            username:req.body.username,
                             password: hash,
                             name: req.body.name,
                             address: req.body.address,
@@ -52,7 +52,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 //-----------Sign In-----------//
-router.post("/login", (req, res, next) => {
+router.post('/login', (req, res, next) => {
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
@@ -93,7 +93,7 @@ router.post("/login", (req, res, next) => {
         });
 });
 
-
+//Get User
 router.get('/', checkAuth, (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const decode = jwt.verify(token, "bismillah");
@@ -114,7 +114,7 @@ router.get('/', checkAuth, (req, res, next) => {
                         phone_number: doc.phone_number,
                         request: {
                             type: "GET",
-                            url: "http://localhost:3000/events/" + doc._id
+                            url: "http://localhost:3000/users/" + doc._id
                         }
                     }
                 })
@@ -129,14 +129,25 @@ router.get('/', checkAuth, (req, res, next) => {
         });
 });
 
-//-----------USERS CRUD-----------//
-
-router.delete('/:userId', (req, res, next) => {
-    User.remove({ _id: req.params.userId })
+//Edit Profile
+router.patch('/edit', checkAuth, (req, res, next) => {
+	const token = req.headers.authorization.split(" ")[1];
+	const decode = jwt.verify(token, "bismillah");
+	const userId = decode.userId;
+    // const id = req.params.userId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+    User.update({ _id: userId }, { $set: updateOps })
         .exec()
-        .then(res => {
+        .then(result => {
             res.status(200).json({
-                message: "User deleted"
+                message: "Profile updated",
+                // request: {
+                //     type: "PATCH",
+                //     url: "http://localhost:3000/profiles" + id
+                // }
             });
         })
         .catch(err => {
@@ -146,5 +157,44 @@ router.delete('/:userId', (req, res, next) => {
             });
         });
 });
+
+
+
+// router.patch('/delete/:userId', checkAuth, (req, res, next) => {
+//     const id = req.params.userId;
+//     User.update({ _id: id }, { $set: {status : "0"} })
+//         .exec()
+//         .then(result => {
+//             res.status(200).json({
+//                 message: "User Deactivated",
+//                 request: {
+//                     type: "PATCH",
+//                     url: "http://localhost:3000/users" + id
+//                 }
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({
+//                 error: err
+//             });
+//         });
+// });
+
+// router.delete('/:userId', (req, res, next) => {
+//     User.remove({ _id: req.params.userId })
+//         .exec()
+//         .then(res => {
+//             res.status(200).json({
+//                 message: "User deleted"
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json({
+//                 error: err
+//             });
+//         });
+// });
 
 module.exports = router;

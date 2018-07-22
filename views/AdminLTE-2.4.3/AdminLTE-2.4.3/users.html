@@ -95,7 +95,7 @@
                 </div>
               </li>
             </ul>
-          </li> 
+          </li>
         </ul>
       </div>
     </nav>
@@ -119,23 +119,23 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         <li>
-          <a href="index.html">
+          <a href="/admin">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
         <li class="treeview">
-          <a href="users.html">
+          <a href="/admin/users">
             <i class="fa fa-user"></i>
             <span>Users</span>
           </a>
         </li>
         <li>
-          <a href="orders.html">
+          <a href="/admin/orders">
             <i class="fa fa-shopping-bag"></i> <span>Orders</span>
           </a>
         </li>
         <li >
-          <a href="events.html">
+          <a href="/admin/events">
             <i class="fa fa-calendar"></i>
             <span>Events</span>
           </a>
@@ -172,42 +172,20 @@
                 </tr>
                 </thead>
                 <tbody>
+                  <% for(var i=0; i < data.users.length; i++) { %>
                 <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td> 4</td>
-                  <td>X</td>
-                  <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger">
-                Remove
-              </button></td>
+                  <td><%- data.users[i]._id %></td>
+                  <td><%- data.users[i].email %></td>
+                  <td><%- data.users[i].name %></td>
+                  <td><%- data.users[i].address %></td>
+                  <td><%- data.users[i].phone_number %></td>
+                  <td>
+              <a href="admin/delete/<%- data.users[i]._id %>'"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger">
+            Remove
+          </button></a>
+          </td>
                 </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td> 4</td>
-                  <td>X</td>
-                  <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger">
-                Remove
-              </button></td>
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td> 4</td>
-                  <td>X</td>
-                  <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger">
-                Remove
-              </button></td>
-                </tr>
+                <% } %>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -222,7 +200,7 @@
               </table>
             </div>
 
-            
+
                 <div class="modal modal-danger fade" id="modal-danger">
           <div class="modal-dialog">
             <div class="modal-content">

@@ -28,7 +28,7 @@ const OrderSchema = mongoose.Schema({
 
     status: {
       type: String,
-      default: "waiting admin's confirmation.."
+      default: "Waiting"
     },
 
     userId: {
