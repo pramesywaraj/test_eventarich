@@ -59,7 +59,7 @@ router.post('/', checkAuth, upload.single('event_image'), (req, res, next) => {
         date_create: date_create,
         date_event: req.body.date,
         description: req.body.description,
-        // event_image: req.file.path,
+        event_image: req.file.path,
         // province: req.body.province,
         city: req.body.city,
         // address: req.body.address,
