@@ -38,8 +38,16 @@ const router = express.Router();
 // mongoose.Promise = global.Promise;
 
 var request = require('request');
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/views/AdminLTE-2.4.3/AdminLTE-2.4.3'));
+
+app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+
 
 //SEMENTARA ADMIN NITIP DISINI
 
@@ -97,7 +105,6 @@ app.get('/',  (req, res) => {
   res.render('AdminLTE-2.4.3/AdminLTE-2.4.3/login');
 });
 
-
 function get(url) {
   return new Promise((resolve, reject) => {
     fetch(url)
@@ -125,7 +132,7 @@ app.get('/admin',ensureAuthenticated, (req, res) => {
         .catch(err => res.send('Ops, something has gone wrong'))
     });
 
-app.get('/admin/orders', (req, res) => {
+app.get('/admin/orders',ensureAuthenticated, (req, res) => {
     request.get('http://localhost:3000/admins/orders/', function(err, response, body) {
         if (!err && response.statusCode == 200) {
             var locals = body ;// console.log(data);
@@ -136,7 +143,7 @@ app.get('/admin/orders', (req, res) => {
     });
 });
 
-app.get('/admin/orders/new', (req, res) => {
+app.get('/admin/orders/new', ensureAuthenticated,(req, res) => {
     request.get('http://localhost:3000/admins/orders/new', function(err, response, body) {
         if (!err && response.statusCode == 200) {
             var locals = body ;// console.log(data);
@@ -147,7 +154,7 @@ app.get('/admin/orders/new', (req, res) => {
     });
 });
 
-app.get('/admin/events', (req, res) => {
+app.get('/admin/events', ensureAuthenticated,(req, res) => {
     request.get('http://localhost:3000/admins/events/', function(err, response, body) {
         if (!err && response.statusCode == 200) {
             var locals = body ;// console.log(data);
@@ -158,7 +165,7 @@ app.get('/admin/events', (req, res) => {
     });
 });
 
-app.get('/admin/events/new', (req, res) => {
+app.get('/admin/events/new', ensureAuthenticated,(req, res) => {
     request.get('http://localhost:3000/admins/events/new', function(err, response, body) {
         if (!err && response.statusCode == 200) {
             var locals = body ;// console.log(data);
@@ -169,7 +176,7 @@ app.get('/admin/events/new', (req, res) => {
     });
 });
 
-app.get('/admin/users', (req, res) => {
+app.get('/admin/users',ensureAuthenticated, (req, res) => {
     request.get('http://localhost:3000/admins/users/', function(err, response, body) {
         if (!err && response.statusCode == 200) {
             var locals = body ;// console.log(data);
@@ -180,7 +187,7 @@ app.get('/admin/users', (req, res) => {
     });
 });
 
-app.get('/admin/users/:id', (req, res) => {
+app.get('/admin/users/:id',ensureAuthenticated, (req, res) => {
     var body = {
       id : req.params.id
     };
@@ -195,7 +202,7 @@ app.get('/admin/users/:id', (req, res) => {
 res.redirect('/admin/users');
     });
 
-app.get('/admin/orders/accept/:id', (req, res) => {
+app.get('/admin/orders/accept/:id', ensureAuthenticated,(req, res) => {
     var body = {
       id : req.params.id
     };
@@ -209,7 +216,7 @@ app.get('/admin/orders/accept/:id', (req, res) => {
 res.redirect('/admin/orders');
   });
 
-app.get('/admin/orders/done/:id', (req, res) => {
+app.get('/admin/orders/done/:id',ensureAuthenticated, (req, res) => {
     var body = {
       id : req.params.id
     };
@@ -223,7 +230,7 @@ app.get('/admin/orders/done/:id', (req, res) => {
 res.redirect('/admin/orders');
   });
 
-app.get('/admin/events/accept/:id', (req, res) => {
+app.get('/admin/events/accept/:id',ensureAuthenticated, (req, res) => {
     var body = {
       id : req.params.id
     };
@@ -237,7 +244,7 @@ app.get('/admin/events/accept/:id', (req, res) => {
 res.redirect('/admin/events');
   });
 
-app.get('/admin/events/reject/:id', (req, res) => {
+app.get('/admin/events/reject/:id', ensureAuthenticated,(req, res) => {
     var body = {
       id : req.params.id
     };
@@ -255,11 +262,6 @@ res.redirect('/admin/events');
 
 
 //------------------------------------------------------------------------------------//
-app.use(morgan('dev'));
-app.use('/uploads', express.static('uploads'));
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-app.use(cookieParser());
 
 
 // Routes which should handle requests

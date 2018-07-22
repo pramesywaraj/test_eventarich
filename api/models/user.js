@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var bcrypt = require('bcryptjs');
 
 
 const UserSchema = mongoose.Schema({
@@ -10,11 +11,6 @@ const UserSchema = mongoose.Schema({
         match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     },
     
-    username: {
-        type: String,
-        index: true
-    },
-
     password: {
         type: String,
         required: true
@@ -41,10 +37,10 @@ const UserSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+var User = module.exports = mongoose.model('User', UserSchema);
 
-module.exports.getUserByUsername = function(username, callback){
-    var query = {username: username};
+module.exports.getUserByEmail = function(email, callback){
+    var query = {email: email};
     User.findOne(query, callback);
 }
 

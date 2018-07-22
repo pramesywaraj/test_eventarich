@@ -14,8 +14,8 @@ var LocalStrategy = require('passport-local').Strategy;
 //=======================================================//
 //login
 passport.use(new LocalStrategy(
-    function (username, password, done) {
-        User.getUserByUsername(username, function (err, user) {
+    function (email, password, done) {
+        User.getUserByEmail(email, function (err, user) {
             if (err) throw err;
             if (!user) {
                 return done(null, false, { message: 'Unknown User' });
@@ -38,7 +38,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
     User.getUserById(id, function (err, user) {
-        done(err, {user});
+        done(err, user);
     });
 });
 
@@ -47,6 +47,14 @@ router.post('/login',
     function (req, res) {
         res.redirect('/admin');
     });
+
+router.get('/logout', function (req, res) {
+    req.logout();
+
+    req.flash('success_msg', 'You are logged out');
+
+    res.redirect('/');
+});
 
 // router.post('/login', (req, res, next) => {
 //     User.find({ email: req.body.email })
