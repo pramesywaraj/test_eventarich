@@ -11,6 +11,7 @@ const bcrypt = require('bcryptjs');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+
 //=======================================================//
 //login
 passport.use(new LocalStrategy(
@@ -236,20 +237,20 @@ router.get('/events', (req, res, next) => {
                 count: docs.length,
                 events: docs.map(doc => {
                     return {
+                        _id: doc._id,
                         title: doc.title,
                         date_create: doc.date_create,
                         date_event: doc.date_event,
                         description: doc.description,
-                        event_image: doc.event_image,
-                        _id: doc._id,
+                        event_image_path: doc.event_image_path,
                         city: doc.city,
                         userId: doc.userId,
                         categoryevent: doc.categoryevent,
                         status: doc.status,
-                        // request: {
-                        //     type: "GET",
-                        //     url: "http://localhost:3000/admins/events/" + doc._id
-                        // }
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3000/admins/events/" + doc._id
+                        }
                     }
                 })
             };
@@ -274,20 +275,20 @@ router.get('/events/new', (req, res, next) => {
                 count: docs.length,
                 newevents: docs.map(doc => {
                     return {
+                        _id: doc._id,
                         title: doc.title,
                         date_create: doc.date_create,
                         date_event: doc.date_event,
                         description: doc.description,
-                        event_image: doc.event_image,
-                        _id: doc._id,
+                        event_image_path: doc.event_image_path,
                         city: doc.city,
                         userId: doc.userId,
                         categoryevent: doc.categoryevent,
                         status: doc.status,
-                        // request: {
-                        //     type: "GET",
-                        //     url: "http://localhost:3000/admins/events/" + doc._id
-                        // }
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3000/admins/events/" + doc._id
+                        }
                     }
                 })
             };
