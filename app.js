@@ -41,7 +41,7 @@ app.use(express.static(__dirname + '/views/AdminLTE-2.4.3/AdminLTE-2.4.3'));
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
