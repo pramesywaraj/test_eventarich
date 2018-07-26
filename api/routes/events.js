@@ -59,7 +59,7 @@ router.post('/', checkAuth, (req, res, next) => {
         city: req.body.city,
         userId: decode.userId,
         categoryevent: req.body.categoryevent,
-        event_image_path : req.file.path
+        event_image_path : req.body.event_image_path
         
     });
 
