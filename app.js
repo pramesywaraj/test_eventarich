@@ -22,20 +22,17 @@ const eventRoutes = require('./api/routes/events');
 const favoriteRoutes = require('./api/routes/favorites');
 const categoryeventRoutes = require('./api/routes/categoryevents');
 const adminRoutes = require('./api/routes/admins');
+// const imageRoutes = require('./api/routes/images');
 
-const url = 'mongodb://localhost:27017/eventarich_me';
+
 // mongoose.connect('mongodb://127.0.0.1:27017');
+// mongoose.connect('mongodb://localhost:27017/eventarich_me');
 mongoose.connect(keys.mongodb.dbURI, () => {
     console.log('connected to mongodb');
 });
 mongoose.Promise = global.Promise;
 
 const router = express.Router();
-
-
-// mongoose.connect('mongodb://127.0.0.1:27017');
-// mongoose.connect('mongodb://localhost/eventarich_me');
-// mongoose.Promise = global.Promise;
 
 var request = require('request');
 app.set('views', path.join(__dirname, 'views'));
@@ -212,7 +209,7 @@ app.get('/admin/orders/accept/:id', ensureAuthenticated,(req, res) => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())
-    .then(json => console.log(json));
+    .then(json => alert(json));
 res.redirect('/admin/orders');
   });
 
@@ -240,7 +237,7 @@ app.get('/admin/events/accept/:id',ensureAuthenticated, (req, res) => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())
-    .then(json => console.log(json));
+    .then(json => alert(json));
 res.redirect('/admin/events');
   });
 
@@ -272,6 +269,7 @@ app.use('/users', userRoutes); //Middleware
 app.use('/favorites', favoriteRoutes);
 app.use('/categoryevents', categoryeventRoutes);
 app.use('/admins', adminRoutes);
+// app.use('/images', imageRoutes);
 // app.use('/', admintRoutes);
 // app.use('/admin/login');
 // app.use('/login');

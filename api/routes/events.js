@@ -45,11 +45,8 @@ var date_create = date+' '+time;
 
 //var name = Jwts.parser().setSigningKey("bismillah").parseClaimsJws("base64EncodedJwtHere").getBody().get("name", String.class);
 
-//Routesnya /products
-
 //Post Events
-router.post('/', checkAuth, upload.single('event_image'), (req, res, next) => {
-    console.log(req.file);
+router.post('/', checkAuth, (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decode = jwt.verify(token, "bismillah");
 
@@ -57,16 +54,13 @@ router.post('/', checkAuth, upload.single('event_image'), (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         date_create: date_create,
-        date_event: req.body.date,
+        date_event: req.body.date_event,
         description: req.body.description,
-        event_image: req.file.path,
-        // province: req.body.province,
         city: req.body.city,
-        // address: req.body.address,
-        // link: req.body.link,
         userId: decode.userId,
-        categoryevent: req.body.categoryevent
-
+        categoryevent: req.body.categoryevent,
+        event_image_path : req.file.path
+        
     });
 
     event
@@ -80,12 +74,9 @@ router.post('/', checkAuth, upload.single('event_image'), (req, res, next) => {
                     date_create: result.date_create,
                     date_event: result.date_event,
                     description: result.description,
-                    event_image: result.event_image,
+                    event_image_path : result.event_image_path,                
                     _id: result._id,
-                    // province: result.province,
                     city: result.city,
-                    // address: result.address,
-                    // link: result.link,
                     userId: result.userId,
                     categoryevent: result.categoryevent,
                     request: {
@@ -118,17 +109,13 @@ router.get('/user', checkAuth, (req, res, next) => {
                 count: docs.length,
                 events: docs.map(doc => {
                     return {
+                        _id: doc._id,
                         title: doc.title,
                         date_create: doc.date_create,
                         date_event: doc.date_event,
                         description: doc.description,
-                        event_image: doc.event_image,
-                        _id: doc._id,
-                        // province: doc.province,
+                        event_image_path : doc.event_image_path,
                         city: doc.city,
-                        // address: doc.address,
-                        // link: doc.link,
-                        userId: doc.userId,
                         categoryevent: doc.categoryevent,
                         request: {
                             type: "GET",
@@ -164,12 +151,9 @@ router.get('/', (req, res, next) => {
                         date_create: doc.date_create,
                         date_event: doc.date_event,
                         description: doc.description,
-                        event_image: doc.event_image,
+                        event_image_path: doc.event_image_path,
                         _id: doc._id,
-                        // province: doc.province,
                         city: doc.city,
-                        // address: doc.address,
-                        // link: doc.link,
                         userId: doc.userId,
                         categoryevent: doc.categoryevent,
                         request: {
@@ -272,31 +256,31 @@ router.patch('/edit/:eventId', checkAuth, (req, res, next) => {
         });
 });
 
-// router.patch('/accept/:eventId', checkAuth, (req, res, next) => {
-//     const id = req.params.eventId;
-//     // const updateOps = {};
-//     // for (const ops of req.body) {
-//     //     updateOps[ops.propName] = ops.value;
-//     // }
-//     Event.update({ _id: id }, { $set: {status : "Accept"} })
-//         .exec()
-//         .then(result => {
-//             res.status(200).json({
-//                 message: "Event Accepted",
-//                 request: {
-//                     type: "PATCH",
-//                     url: "http://localhost:3000/events" + id
-//                 }
-//             });
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).json({
-//                 error: err
-//             });
-//         });
-// });
-//
+router.patch('/accept/:eventId', checkAuth, (req, res, next) => {
+    const id = req.params.eventId;
+    // const updateOps = {};
+    // for (const ops of req.body) {
+    //     updateOps[ops.propName] = ops.value;
+    // }
+    Event.update({ _id: id }, { $set: {status : "Accept"} })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: "Event Accepted",
+                request: {
+                    type: "PATCH",
+                    url: "http://localhost:3000/events" + id
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
 router.post('/delete/:eventId', checkAuth, (req, res, next) => {
     const id = req.params.eventId;
     Event.update({ _id: id }, { $set: {status : "0"} })

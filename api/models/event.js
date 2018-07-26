@@ -18,7 +18,7 @@ const EventSchema = mongoose.Schema({
     },
 
     date_event: {
-        type: Date, 
+        type: Date,
         required: true
     },
 
@@ -26,22 +26,13 @@ const EventSchema = mongoose.Schema({
         type: String
     },
 
-    event_image: {
+    event_image_path : {
       type: String,
-      // required: true
     },
 
     city: {
       type: String,
       required: true
-    },
-
-    // link: {
-    //   type: String,
-    //   required: true
-    // },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true
     },
 
     status: {
@@ -51,7 +42,11 @@ const EventSchema = mongoose.Schema({
 
     categoryevent: {
       type: mongoose.Schema.Types.ObjectId, ref: 'Categoryevent', required: true
-    }
+    },
+    
+    userId: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true
+    },
 
 });
 
