@@ -41,8 +41,8 @@ app.use(express.static(__dirname + '/views/AdminLTE-2.4.3/AdminLTE-2.4.3'));
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
-app.use(bodyParser.json({ limit: '50mb'}));
-app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
+app.use(bodyParser.json({limit : '50mb'}));
+app.use(bodyParser.urlencoded({limit : '50mb', extended: true}));
 app.use(cookieParser());
 
 
