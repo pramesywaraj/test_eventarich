@@ -40,6 +40,11 @@ const EventSchema = mongoose.Schema({
       default: "waiting admin's confirmation.."
     },
 
+    likes : {
+        type : Number,
+        default : 0
+    },
+
     categoryevent: {
       type: mongoose.Schema.Types.ObjectId, ref: 'Categoryevent', required: true
     },

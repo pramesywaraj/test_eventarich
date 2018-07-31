@@ -40,7 +40,7 @@ router.post('/:eventId' , (req, res, next) => {
                 error: err
             });
         });
-        });
+});
 
 //Count Likes
 router.get('/:eventId', (req, res, next) => {

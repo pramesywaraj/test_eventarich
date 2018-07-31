@@ -59,8 +59,7 @@ router.post('/', checkAuth, (req, res, next) => {
         city: req.body.city,
         userId: decode.userId,
         categoryevent: req.body.categoryevent,
-        event_image_path : req.body.event_image_path
-        
+        event_image_path : req.body.event_image_path,        
     });
 
     event
@@ -117,6 +116,7 @@ router.get('/user', checkAuth, (req, res, next) => {
                         event_image_path : doc.event_image_path,
                         city: doc.city,
                         categoryevent: doc.categoryevent,
+                        likes  : doc.likes,
                         request: {
                             type: "GET",
                             url: "http://localhost:3000/events/" + doc._id
@@ -156,6 +156,7 @@ router.get('/', (req, res, next) => {
                         city: doc.city,
                         userId: doc.userId,
                         categoryevent: doc.categoryevent,
+                        likes : doc.likes,
                         request: {
                             type: "GET",
                             url: "http://localhost:3000/events/" + doc._id
@@ -202,34 +203,29 @@ router.get('/:eventId', (req, res, next) => {
         });
 });
 
-
-// router.post('/search', (req, res, next) => {
-//     var title = req.body.title;
-//     Event.find({title : title})
-//         .populate('userId', 'name')
-//         .populate('categoryevent', 'name')
-//         .select('')
-//         .exec()
-//         .then(doc => {
-//             console.log("From database", doc);
-//             if(doc) {
-//                 res.status(200).json({
-//                     event: doc,
-//                     request: {
-//                         type: "GET",
-//                         desc: "Get all events",
-//                         url: "http://localhost:3000/events"
-//                     }
-//                 });
-//             } else {
-//                 res.status(404).json({message: "Format EventID tidak valid"});
-//             }
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).json({error : err});
-//         });
-// });
+router.patch('/like/:eventId', checkAuth, (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+	const decode = jwt.verify(token, "bismillah");
+    const userId = decode.userId;
+    const id = req.params.eventId;
+    Event.update({ _id: id }, { $inc: {likes : 1} })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: "Likes updated",
+                request: {
+                    type: "PATCH",
+                    url: "http://localhost:3000/events" + id
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+});
 
 router.patch('/edit/:eventId', checkAuth, (req, res, next) => {
     const id = req.params.eventId;
@@ -302,19 +298,5 @@ router.post('/delete/:eventId', checkAuth, (req, res, next) => {
         });
 });
 
-// router.delete('/delete/:eventId', checkAuth, (req, res, next) => {
-//     const id = req.params.eventId;
-//     Event.remove({_id: id})
-//         .exec()
-//         .then(result => {
-//             res.status(200).json(result);
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).json({
-//                 error: err
-//             });
-//         });
-// });
 
 module.exports = router;
