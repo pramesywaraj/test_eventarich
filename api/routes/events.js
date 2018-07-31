@@ -204,7 +204,7 @@ router.get('/:eventId', (req, res, next) => {
         });
 });
 
-router.patch('/like/:eventId', checkAuth, (req, res, next) => {
+router.post('/like/:eventId', checkAuth, (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decode = jwt.verify(token, "bismillah");
     
@@ -215,7 +215,7 @@ router.patch('/like/:eventId', checkAuth, (req, res, next) => {
             res.status(200).json({
                 message: "Likes updated",
                 request: {
-                    type: "PATCH",
+                    type: "POST",
                     url: "http://localhost:3000/events" + id
                 }
             });
