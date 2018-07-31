@@ -206,8 +206,8 @@ router.get('/:eventId', (req, res, next) => {
 
 router.patch('/like/:eventId', checkAuth, (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
-	const decode = jwt.verify(token, "bismillah");
-    const userId = decode.userId;
+    const decode = jwt.verify(token, "bismillah");
+    
     const id = req.params.eventId;
     Event.update({ _id: id }, { $inc: {likes : 1} })
         .exec()
