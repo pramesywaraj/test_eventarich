@@ -78,6 +78,7 @@ router.post('/', checkAuth, (req, res, next) => {
                     city: result.city,
                     userId: result.userId,
                     categoryevent: result.categoryevent,
+                    likes : result.likes,
                     request: {
                         type: 'GET',
                         url: "http://localhost:3000/events/" + result._id
