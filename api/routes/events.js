@@ -92,6 +92,37 @@ router.post('/', checkAuth, (req, res, next) => {
         });
 });
 
+
+router.post('/like/:eventId', (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decode = jwt.verify(token, "bismillah");
+    const userId = decode.userId;
+    const id_event = req.params.eventId;
+    Event.update({ _id: id_event }, { $inc: {likes : 1} })
+        .exec()
+        .then(result => {
+            
+            res.status(200).json({
+                message: "Likes updated",
+                request: {
+                    type: "POST"
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+    User.update({_id: userId}, {$push : {liked_event : id_event}})
+        .exec()
+        .then(console.log("Succeed"))
+        .catch(err => {
+            console.log(err);
+        });
+});
+
 //Get Event By UserId
 router.get('/user', checkAuth, (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
@@ -199,36 +230,6 @@ router.get('/:eventId', (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({error : err});
-        });
-});
-
-router.post('/like/:eventId', (req, res, next) => {
-    const token = req.headers.authorization.split(" ")[1];
-    const decode = jwt.verify(token, "bismillah");
-    const userId = decode.userId;
-    const id_event = req.params.eventId;
-    Event.update({ _id: id_event }, { $inc: {likes : 1} })
-        .exec()
-        .then(result => {
-            
-            res.status(200).json({
-                message: "Likes updated",
-                request: {
-                    type: "POST"
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-    User.update({_id: userId}, {$push : {liked_event : id_event}})
-        .exec()
-        .then(console.log("Succeed"))
-        .catch(err => {
-            console.log(err);
         });
 });
 
