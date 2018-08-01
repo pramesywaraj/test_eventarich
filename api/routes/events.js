@@ -219,12 +219,11 @@ router.post('/like/:eventId', (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-});
+                console.log(err);
+                res.status(500).json({error: err});
+            }
+        );
+    });
 
 router.patch('/edit/:eventId', checkAuth, (req, res, next) => {
     const id = req.params.eventId;
