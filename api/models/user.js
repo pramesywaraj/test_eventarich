@@ -17,24 +17,28 @@ const UserSchema = mongoose.Schema({
     },
 
     name: {
-		    type: String,
+		type: String,
         require: true
     },
 
-	  address: {
-		    type: String,
+	address: {
+		type: String,
         require : true
     },
 
-	  phone_number: {
-		    type: String,
+    phone_number: {
+        type: String,
         require: true
-	  },
+    },
 
     status: {
-      type: String,
-      default: "1"
-    }
+        type: String,
+        default: "1"
+    },
+
+    liked_event: [{
+        type: String, default: []
+    }]
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);

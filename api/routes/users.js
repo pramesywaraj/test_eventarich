@@ -30,7 +30,7 @@ router.post('/signup', (req, res, next) => {
                             password: hash,
                             name: req.body.name,
                             address: req.body.address,
-                            phone_number: req.body.phone_number
+                            phone_number: req.body.phone_number,
                         });
                         user.save()
                             .then(result => {
@@ -112,6 +112,7 @@ router.get('/', checkAuth, (req, res, next) => {
                         name: doc.name,
                         address: doc.address,
                         phone_number: doc.phone_number,
+                        liked_event : doc.liked_event,
                         request: {
                             type: "GET",
                             url: "http://localhost:3000/users/" + doc._id

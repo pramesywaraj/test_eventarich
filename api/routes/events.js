@@ -1,6 +1,3 @@
-// Ini buat referensi aja, ada buat upload filenya
-
-
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -37,6 +34,7 @@ const upload = multer({
 
 const Event = require('../models/event');
 const Categoryevent = require('../models/categoryevent');
+const User = require('../models/user');
 // var date_create = Date.now();
 var today = new Date();
 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -204,22 +202,30 @@ router.get('/:eventId', (req, res, next) => {
         });
 });
 
-router.post('/like/:eventId', checkAuth, (req, res, next) => {
+router.post('/like/:eventId', (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decode = jwt.verify(token, "bismillah");
-    
-    const id = req.params.eventId;
-    Event.update({ _id: id }, { $inc: {likes : 1} })
+    const userId = decode.userId;
+    const id_event = req.params.eventId;
+    Event.update({ _id: id_event }, { $inc: {likes : 1} })
         .exec()
         .then(result => {
+            
             res.status(200).json({
                 message: "Likes updated",
                 request: {
-                    type: "POST",
-                    url: "http://localhost:3000/events" + id
+                    type: "POST"
                 }
             });
         })
+        .then(
+            User.update({_id: userId}, {$push : {liked_event : id_event}})
+                .exec()
+                .then(console.log("Succeed"))
+                .catch(err => {
+                    console.log(err);
+                })
+        )
         .catch(err => {
             console.log(err);
             res.status(500).json({
