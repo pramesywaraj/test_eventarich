@@ -210,7 +210,7 @@ router.post('/like/:eventId', (req, res, next) => {
     Event.update({ _id: id_event }, { $inc: {likes : 1} })
         .exec()
         .then(result => {
-            
+            User.update({_id: userId}, {$push : {liked_event : id_event}});
             res.status(200).json({
                 message: "Likes updated",
                 request: {
@@ -218,14 +218,6 @@ router.post('/like/:eventId', (req, res, next) => {
                 }
             });
         })
-        .then(
-            User.update({_id: userId}, {$push : {liked_event : id_event}})
-                .exec()
-                .then(console.log("Succeed"))
-                .catch(err => {
-                    console.log(err);
-                })
-        )
         .catch(err => {
             console.log(err);
             res.status(500).json({
