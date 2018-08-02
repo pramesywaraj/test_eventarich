@@ -31,6 +31,10 @@ const UserSchema = mongoose.Schema({
         require: true
     },
 
+    description : {
+        type : String,
+    },
+
     status: {
         type: String,
         default: "1"

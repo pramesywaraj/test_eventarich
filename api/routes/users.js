@@ -113,6 +113,7 @@ router.get('/', checkAuth, (req, res, next) => {
                         address: doc.address,
                         phone_number: doc.phone_number,
                         liked_event : doc.liked_event,
+                        description : doc.description,
                         request: {
                             type: "GET",
                             url: "http://localhost:3000/users/" + doc._id

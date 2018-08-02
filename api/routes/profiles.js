@@ -34,16 +34,15 @@ router.get('/:userId', checkAuth, (req, res, next) => {
         });
 });
 
-router.patch('/edit/:userId', checkAuth, (req, res, next) => {
+router.post('/edit', checkAuth, (req, res, next) => {
 	const token = req.headers.authorization.split(" ")[1];
 	const decode = jwt.verify(token, "bismillah");
 	const userId = decode.userId;
-    const id = req.params.userId;
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
-    User.update({ _id: id }, { $set: updateOps })
+    User.update({ _id: userId }, { $set: updateOps })
         .exec()
         .then(result => {
             res.status(200).json({
@@ -63,13 +62,10 @@ router.patch('/edit/:userId', checkAuth, (req, res, next) => {
 });
 
 router.patch('/editpassword/:userId', (req, res, next) => {
-	// const token = req.headers.authorization.split(" ")[1];
-	// const decode = jwt.verify(token, "bismillah");
-	// const userId = decode.userId;
     const id = req.params.userId;
   
     bcrypt.hash(req.body.password, 10, (err, hash) => {
-    	 User.update({ _id: id }, { $set: {password : hash}})
+    	User.update({ _id: id }, { $set: {password : hash}})
         .exec()
         .then(result => {
             res.status(200).json({
@@ -87,10 +83,6 @@ router.patch('/editpassword/:userId', (req, res, next) => {
             });
         });
     })
-
-
-
-
 });
 
 
