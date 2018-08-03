@@ -4,7 +4,7 @@ const mongoose = require('mongoose');   //Generate ID
 const checkAuth = require('../middleware/checkauth');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 router.get('/:userId', checkAuth, (req, res, next) => {
@@ -39,7 +39,7 @@ router.post('/edit', checkAuth, (req, res, next) => {
 	const decode = jwt.verify(token, "bismillah");
 	const userId = decode.userId;
     const updateOps = {};
-    for (const ops of req.body) {
+    for (const ops in req.body) {
         updateOps[ops.propName] = ops.value;
     }
     User.update({ _id: userId }, { $set: updateOps })
@@ -49,7 +49,7 @@ router.post('/edit', checkAuth, (req, res, next) => {
                 message: "Profile updated",
                 request: {
                     type: "PATCH",
-                    url: "http://localhost:3000/profiles" + id
+                    url: "http://localhost:3000/profiles" + userId
                 }
             });
         })
