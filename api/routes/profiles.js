@@ -42,6 +42,7 @@ router.post('/edit', checkAuth, (req, res, next) => {
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
+    console.log(req.body.description);
     User.update({ _id: userId }, { $set: updateOps })
         .exec()
         .then(result => {
