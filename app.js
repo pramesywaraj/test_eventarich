@@ -22,7 +22,7 @@ const eventRoutes = require('./api/routes/events');
 const favoriteRoutes = require('./api/routes/favorites');
 const categoryeventRoutes = require('./api/routes/categoryevents');
 const adminRoutes = require('./api/routes/admins');
-// const imageRoutes = require('./api/routes/images');
+const profileRoutes = require('./api/routes/profiles');
 
 
 // mongoose.connect('mongodb://127.0.0.1:27017');
@@ -269,6 +269,7 @@ app.use('/users', userRoutes); //Middleware
 app.use('/favorites', favoriteRoutes);
 app.use('/categoryevents', categoryeventRoutes);
 app.use('/admins', adminRoutes);
+app.use('/profiles', profileRoutes);
 // app.use('/images', imageRoutes);
 // app.use('/', admintRoutes);
 // app.use('/admin/login');

@@ -132,7 +132,7 @@ router.get('/', checkAuth, (req, res, next) => {
 });
 
 //Edit Profile
-router.patch('/edit', checkAuth, (req, res, next) => {
+router.post('/edit', checkAuth, (req, res, next) => {
 	const token = req.headers.authorization.split(" ")[1];
 	const decode = jwt.verify(token, "bismillah");
 	const userId = decode.userId;
