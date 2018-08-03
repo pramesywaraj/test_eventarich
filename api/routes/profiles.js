@@ -38,10 +38,6 @@ router.post('/edit', checkAuth, (req, res, next) => {
 	const token = req.headers.authorization.split(" ")[1];
 	const decode = jwt.verify(token, "bismillah");
 	const userId = decode.userId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
     console.log(req.body.description);
     User.update({ _id: userId }, { $set: updateOps })
         .exec()
