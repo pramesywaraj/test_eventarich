@@ -39,7 +39,7 @@ router.post('/edit', checkAuth, (req, res, next) => {
 	const decode = jwt.verify(token, "bismillah");
 	const userId = decode.userId;
     console.log(req.body.description);
-    User.update({ _id: userId }, { $set: {description : req.body.description, name : req.body.username, address : req.body.address, phone_number : req.body.phone_number}})
+    User.update({ _id: userId }, { $set: {description : req.body.description, name : req.body.name, address : req.body.address, phone_number : req.body.phone_number}})
         .exec()
         .then(result => {
             res.status(200).json({
