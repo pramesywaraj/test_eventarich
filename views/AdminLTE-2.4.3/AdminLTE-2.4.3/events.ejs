@@ -54,16 +54,17 @@ table.dataTable {
     clear: both;
     margin-top: 6px !important;
     margin-bottom: 6px !important;
-    max-width: none !important;
     background-color: #f9f9f9;
     border-collapse: separate !important;
+    width: 100%
 }
 .btn {
     border-radius: 3px;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: 1px solid transparent;
-    width: 80px;
+    width: 5vw;
+    font-size : 0.5vw;
 }
 
 .btn-default {
@@ -177,9 +178,9 @@ table.dataTable {
 
 
     <!-- Main content -->
-        <section class="content">
+    <section class="content">
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">ALL EVENTS</h3>
@@ -357,7 +358,8 @@ table.dataTable {
       'searching'   : false,
       'ordering'    : true,
       'info'        : true,
-      'autoWidth'   : false
+      // 'autoWidth'   : false,
+      'scrollX'     : true
     })
   })
 
